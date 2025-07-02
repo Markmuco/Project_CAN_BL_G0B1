@@ -113,14 +113,16 @@ typedef struct s_app_info
 #define WAIT_KEY_3	(0x55AA5503) // Wait by usart3
 
 #define CRASH_KEY 	(0x55AA55CC)
+#define CAN_KEY		(0x112255AA)
 
 #define RAM_KEY   	(0x20000000) // RAM address
-#define RAM_SLEEP 	(0x20000004) // RAM address
+#define RAM_SERIAL	(0x20000004)
 
 #define SLEEP_KEY 	(0x11BBCCDD)
 
 
 void JumptoApp(void);
+void f_start(void);
 
 /* USER CODE END Private defines */
 

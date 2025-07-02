@@ -53,6 +53,7 @@
 #include "flash.h"
 #include "crc.h"
 #include "uart_sci.h"
+#include "can_functions.h"
 
 /* USER CODE END Includes */
 
@@ -123,7 +124,6 @@
 uint8_t toggle_tmr = NO_TIMER;
 uint8_t autostart_tmr = NO_TIMER;
 
-uint32_t *ram_sleep = (uint32_t*) RAM_SLEEP;
 
 /* Private variables ---------------------------------------------------------*/
 
@@ -166,6 +166,7 @@ int main(void)
 	app_info_t *p_app_info = (app_info_t*) FLASH_APP_START_ADDR;
 //	app_info_t *p_shadow_info = (app_info_t*) FLASH_SHADOW_START_ADDR;
 	uint32_t *ram_key = (uint32_t*) RAM_KEY;
+	uint32_t *p_serial = (uint32_t*) RAM_SERIAL; // application fills the serial
 
   /* USER CODE END 1 */
 
@@ -203,13 +204,16 @@ int main(void)
 	timer_open();
 
 	// init the Shell
-	shell_open(*ram_key);
+	shell_open();
 
-//	if (RCC->CSR & RCC_CSR_IWDGRSTF)
-//		tty_puts("WDT reboot\r\n");
-//	RCC->CSR = RCC_CSR_RMVF;
+	FDCAN_Config();
 
-	if (*ram_key == WAIT_KEY_1 || *ram_key == WAIT_KEY_3)
+	if (*ram_key == CAN_KEY)
+	{
+//		HAL_Delay(100);
+		can_send_msg(ID_OC_RES, 4, (uint8_t *) p_serial);
+	}
+	else if (*ram_key == WAIT_KEY_1 || *ram_key == WAIT_KEY_3)
 	{
 		tty_puts("'MT' (@) 2025 STM32G0 CHG_BL, Stop\r\n");
 	}
@@ -297,8 +301,6 @@ int main(void)
     /* USER CODE BEGIN 3 */
 		wdt_clr();
 
-		char c;
-
 		shell_process();
 
 		if (timer_elapsed(autostart_tmr))
@@ -374,6 +376,15 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 
+
+void f_start(void)
+{
+	if (autostart_tmr == NO_TIMER)
+		autostart_tmr = timer_get();
+	timer_start(autostart_tmr, 10, NULL);
+}
+
+
 /**
  * Jump to application
  */
@@ -395,16 +406,16 @@ void JumptoApp(void)
 	NVIC_DisableIRQ(EXTI2_3_IRQn);
 	NVIC_DisableIRQ(DMA1_Channel1_IRQn);
 	NVIC_DisableIRQ(DMA1_Channel2_3_IRQn);
-//	NVIC_DisableIRQ(ADC1_COMP_IRQn);
-//	NVIC_DisableIRQ(TIM2_IRQn);
+	NVIC_DisableIRQ(TIM16_FDCAN_IT0_IRQn);
+	NVIC_DisableIRQ(TIM17_FDCAN_IT1_IRQn);
 //	NVIC_DisableIRQ(TIM3_IRQn);
 	NVIC_DisableIRQ(I2C1_IRQn);
 //	NVIC_DisableIRQ(I2C2_IRQn);
 	NVIC_DisableIRQ(SPI1_IRQn);
 //	NVIC_DisableIRQ(SPI2_IRQn);
 	NVIC_DisableIRQ(USART1_IRQn);
-//	NVIC_DisableIRQ(USART2_IRQn);
-//	NVIC_DisableIRQ(USART3_4_LPUART1_IRQn);
+	NVIC_DisableIRQ(USART2_LPUART2_IRQn);
+	NVIC_DisableIRQ(USART3_4_5_6_LPUART1_IRQn);
 
 
 

@@ -87,7 +87,7 @@ static const cmd_tbl_t cmd_tbl[] =
  *
  * \return -.
  */
-void shell_open(uint32_t key)
+void shell_open(void)
 {
 	if (tmr == NO_TIMER)
 		tmr = timer_get();
@@ -734,12 +734,7 @@ static void shell_tabline_get(cmdline_obj_t *object)
  */
 static void sh_help(char *param)
 {
-	uint8_t i;
-
-	HAL_StatusTypeDef err;
-
 	tty_puts("No Help\r\n");
-
 }
 
 /*!
@@ -982,32 +977,8 @@ void sh_crc(char *param)
 #endif
 }
 
-/*
- STM32F05xxx STM32F030x8 STM32F03xx4/6 0x1FFFEC00
- STM32F030xC 0x1FFFD800
- STM32F04xxx 0x1FFFC400
- STM32F070x6 0x1FFFC400
- STM32F070xB 0x1FFFC800
- STM32F071xx/072xx 0x1FFFC800
- STM32F09xxx 0x1FFFD800
- STM32F10xxx 0x1FFFF000
- STM32F105xx/107xx 0x1FFFB000
- STM32F10xxx 0x1FFFE000
- STM32F2xxxx 0x1FFF0000
- STM32F3xxxx 0x1FFFD800
- STM32F40xxx 0x1FFF0000
- STM32F72xxx/73xxx 0x1FF00000
- STM32F74xxx/75xxx 0x1FF00000
- STM32F76xxx/77xxx 0x1FF00000
- STM32H74xxx/75xxx 0x1FF00000
- STM32L01xxx/02xxx 0x1FF00000
- STM32L031xx/041xx 0x1FF00000
- STM32L05xxx/06xxx 0x1FF00000
- STM32L07xxx/08xxx 0x1FF00000
- STM32L1xxx 0x1FF00000
- STM32L43xxx 0x1FFF0000
 
- /*!
+ /*
  * \brief Jump to internal bootloader, AN2606 page 266
  *
  * \param

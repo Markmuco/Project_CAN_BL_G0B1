@@ -102,7 +102,7 @@ typedef struct
 } cmdline_obj_t;
 
 // Public function prototypes.
-void shell_open(uint32_t key);
+void shell_open(void);
 void shell_close(void);
 void shell_process(void);
 bool shell_getc(uint8_t *c);

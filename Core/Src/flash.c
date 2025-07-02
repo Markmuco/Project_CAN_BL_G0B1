@@ -20,8 +20,7 @@ static uint32_t GetBank(uint32_t Addr);
 #if 1
 HAL_StatusTypeDef stm32_flash_erase(uint32_t start, uint32_t size)
 {
-	uint32_t FirstPage = 0, NbOfPages = 0, BankNumber = 0;
-	uint32_t Address = 0, PageError = 0;
+	uint32_t FirstPage = 0, NbOfPages = 0, BankNumber = 0, PageError = 0;
 
 	/* Unlock the Flash to enable the flash control register access *************/
 	HAL_FLASH_Unlock();
@@ -61,7 +60,7 @@ HAL_StatusTypeDef stm32_flash_erase(uint32_t start, uint32_t size)
 		 User can add here some code to deal with this error.
 		 PageError will contain the faulty page and then to know the code error on this page,
 		 user can call function 'HAL_FLASH_GetError()'
-			/* Make LED4 blink (100ms on, 2s off) to indicate error in Erase operation */
+		 */
 			return (HAL_ERROR);
 	}
 
@@ -80,7 +79,7 @@ HAL_StatusTypeDef stm32_flash_erase(uint32_t start, uint32_t size)
 			 User can add here some code to deal with this error.
 			 PageError will contain the faulty page and then to know the code error on this page,
 			 user can call function 'HAL_FLASH_GetError()'
-				/* Make LED4 blink (100ms on, 2s off) to indicate error in Erase operation */
+			*/
 				return (HAL_ERROR);
 		}
 
@@ -196,7 +195,6 @@ bool stm32_flash_write(uint32_t address, uint8_t *p_data, uint32_t size)
 	HAL_FLASH_Unlock();
 
 	uint64_t temp;
-	uint32_t lo, hi;
 
 	// Iterate through the number of data bytes
 	for (uint32_t var = 0; var < size; var += 8)

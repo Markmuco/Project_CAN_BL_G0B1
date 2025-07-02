@@ -51,10 +51,10 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(DIS_BRIDGE_GPIO_Port, DIS_BRIDGE_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(DIS_BRIDGE_GPIO_Port, DIS_BRIDGE_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(EN_X_GPIO_Port, EN_X_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(EN_X_GPIO_Port, EN_X_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : DIS_BRIDGE_Pin */
   GPIO_InitStruct.Pin = DIS_BRIDGE_Pin;

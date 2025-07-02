@@ -16,6 +16,7 @@
 HAL_StatusTypeDef stm32_flash_erase(uint32_t start, uint32_t size);
 bool stm32_ymodem_flash_write(void *p_args);
 bool copy_shadow(uint32_t size);
+bool stm32_flash_write(uint32_t address, uint8_t *p_data, uint32_t size);
 
 // bootloader			page 1..144    =	18Kb
 // Application			page 144..583  =	55K
