@@ -64,26 +64,26 @@ HAL_StatusTypeDef stm32_flash_erase(uint32_t start, uint32_t size)
 			return (HAL_ERROR);
 	}
 
-	if (EraseInitStruct.NbPages > 64)
-	{
-		EraseInitStruct.Banks = FLASH_BANK_2;
-		EraseInitStruct.Page = 0;
-		EraseInitStruct.NbPages = NbOfPages - 64;
-
-		tty_puts(" BK2");
-
-		if (HAL_FLASHEx_Erase(&EraseInitStruct, &PageError) != HAL_OK)
-		{
-			/*
-			 Error occurred while page erase.
-			 User can add here some code to deal with this error.
-			 PageError will contain the faulty page and then to know the code error on this page,
-			 user can call function 'HAL_FLASH_GetError()'
-			*/
-				return (HAL_ERROR);
-		}
-
-	}
+//	if (EraseInitStruct.NbPages > 64)
+//	{
+//		EraseInitStruct.Banks = FLASH_BANK_2;
+//		EraseInitStruct.Page = 0;
+//		EraseInitStruct.NbPages = NbOfPages - 64;
+//
+//		tty_puts(" BK2");
+//
+//		if (HAL_FLASHEx_Erase(&EraseInitStruct, &PageError) != HAL_OK)
+//		{
+//			/*
+//			 Error occurred while page erase.
+//			 User can add here some code to deal with this error.
+//			 PageError will contain the faulty page and then to know the code error on this page,
+//			 user can call function 'HAL_FLASH_GetError()'
+//			*/
+//				return (HAL_ERROR);
+//		}
+//
+//	}
 	HAL_FLASH_Lock();
 
 	return (HAL_OK);

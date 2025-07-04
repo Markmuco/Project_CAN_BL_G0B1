@@ -134,6 +134,8 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
 
+static HAL_StatusTypeDef Disable_DualBank(void);
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -232,6 +234,8 @@ int main(void)
 
 	else
 		tty_puts("'MT' (@) 2025 STM32G0 CHG_BL\r\n");
+
+	//Disable_DualBank();
 
 	// APP need to clear this flag or else app was crashed
 	*ram_key = CRASH_KEY;
@@ -376,7 +380,43 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 
+#if 0
+static HAL_StatusTypeDef Disable_DualBank(void)
+{
+    HAL_StatusTypeDef status;
 
+    // Unlock Flash and Option Bytes
+    HAL_FLASH_Unlock();
+    HAL_FLASH_OB_Unlock();
+
+    // Get current Option Bytes configuration
+    FLASH_OBProgramInitTypeDef obConfig;
+    HAL_FLASHEx_OBGetConfig(&obConfig);
+
+    // Modify DBANK bit: set it to 0 to disable dual-bank
+    obConfig.OptionType = OPTIONBYTE_USER;
+    obConfig.USERType = OB_USER_DUAL_BANK;
+    obConfig.USERConfig &= ~OB_USER_DBANK;  // Clear DBANK bit → Single Bank
+
+    // Program new Option Bytes
+    status = HAL_FLASHEx_OBProgram(&obConfig);
+
+    if (status != HAL_OK) {
+        HAL_FLASH_OB_Lock();
+        HAL_FLASH_Lock();
+        return status;
+    }
+
+    // Launch Option Bytes reload
+    status = HAL_FLASH_OB_Launch();  // This causes a system reset if successful
+
+    // Lock Option Bytes and Flash (if it failed and returned)
+    HAL_FLASH_OB_Lock();
+    HAL_FLASH_Lock();
+
+    return status;  // Won't return if OB_Launch succeeds
+}
+#endif
 void f_start(void)
 {
 	if (autostart_tmr == NO_TIMER)
